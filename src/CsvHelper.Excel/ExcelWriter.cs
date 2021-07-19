@@ -123,6 +123,30 @@ namespace CsvHelper.Excel
             _worksheet.Row(rowIndex).Height = height;
         }
 
+
+        /// <summary>Merges the cell of current row, starting from current writing point.</summary>
+        /// <param name="cellCount">The cell count, starting from current writing point to the last merging cell.</param>
+        public void MergeCell(int cellCount)
+        {
+			MergeCell(_index, cellCount);
+		}
+
+        /// <summary>Merges the cell of current row.</summary>
+        /// <param name="startCell">The start cell.</param>
+        /// <param name="cellCount">The cell count.</param>
+        public void MergeCell(int startCell, int cellCount)
+        {
+            _worksheet.Range(_worksheet.Cell(_row, startCell), _worksheet.Cell(_row, startCell + cellCount - 1)).Merge();
+        }
+
+        /// <summary>Sets the style of current writing cell.</summary>
+        /// <returns>Return the style of current writing cell. Can be set or get freely.</returns>
+        public IXLStyle SetStyle()
+        {
+            var cell = _worksheet.Cell(_row, _index);
+            return cell.Style;
+        }
+
         public override void WriteComment(string text)
         {
             var cell = _worksheet.Cell(_row, _index);
