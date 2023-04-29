@@ -18,8 +18,6 @@ namespace CsvHelper.Excel
 	/// </summary>
 	public class ExcelWriter : CsvWriter
 	{
-		private readonly bool _leaveOpen;
-		private readonly bool _sanitizeForInjection;
 
 		private bool _disposed;
 		private int _row = 1;
@@ -67,15 +65,14 @@ namespace CsvHelper.Excel
 		/// <param name="stream">The stream.</param>
 		/// <param name="culture">The culture.</param>
 		/// <param name="leaveOpen"><c>true</c> to leave the <see cref="TextWriter"/> open after the <see cref="ExcelWriter"/> object is disposed, otherwise <c>false</c>.</param>
-		public ExcelWriter(Stream stream, CultureInfo culture, bool leaveOpen = false) : this(stream, "export",  culture, leaveOpen) { }
+		public ExcelWriter(Stream stream, CultureInfo culture) : this(stream, "export",  culture) { }
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExcelWriter"/> class.
 		/// </summary>
 		/// <param name="stream">The stream.</param>
  		/// <param name="sheetName">The sheet name</param>
 		/// <param name="culture">The culture.</param>
-		/// <param name="leaveOpen"><c>true</c> to leave the <see cref="TextWriter"/> open after the <see cref="ExcelWriter"/> object is disposed, otherwise <c>false</c>.</param>
-		public ExcelWriter(Stream stream, string sheetName, CultureInfo culture, bool leaveOpen = false) : this(stream, sheetName, new CsvConfiguration(culture, leaveOpen: leaveOpen)) { }
+		public ExcelWriter(Stream stream, string sheetName, CultureInfo culture) : this(stream, sheetName, new CsvConfiguration(culture)) { }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExcelWriter"/> class.
@@ -88,9 +85,6 @@ namespace CsvHelper.Excel
 			configuration.Validate();
 			_worksheet = new XLWorkbook(XLEventTracking.Disabled).AddWorksheet(sheetName);
 			this._stream = stream;
-			
-			_leaveOpen = configuration.LeaveOpen;
-			_sanitizeForInjection = configuration.SanitizeForInjection;
 		}
 
         public void SetDefaultColumnWidth(double width)
@@ -156,10 +150,7 @@ namespace CsvHelper.Excel
         /// <inheritdoc/>
 		public override void WriteField(string field, bool shouldQuote)
 		{
-			if (_sanitizeForInjection)
-			{
-				field = SanitizeForInjection(field);
-			}
+			field = SanitizeForInjection(field);
 
 			WriteToCell(field);
 			_index++;
@@ -241,10 +232,7 @@ namespace CsvHelper.Excel
 			{
 				// Dispose managed state (managed objects)
 				_worksheet.Workbook.Dispose();
-				if (!_leaveOpen)
-				{
-					_stream.Dispose();
-				}
+				_stream.Dispose();
 			}
 
 			// Free unmanaged resources (unmanaged objects) and override finalizer
@@ -271,10 +259,7 @@ namespace CsvHelper.Excel
 			{
 				// Dispose managed state (managed objects)
 				_worksheet.Workbook.Dispose();
-				if (!_leaveOpen)
-				{
-					await _stream.DisposeAsync().ConfigureAwait(false);
-				}
+				await _stream.DisposeAsync().ConfigureAwait(false);
 			}
 
 			// Free unmanaged resources (unmanaged objects) and override finalizer

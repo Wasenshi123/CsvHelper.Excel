@@ -70,8 +70,7 @@ namespace CsvHelper.Excel
         /// <param name="stream">The stream.</param>
         /// <param name="culture">The culture.</param>
         /// <param name="leaveOpen"><c>true</c> to leave the <see cref="TextWriter"/> open after the <see cref="ExcelParser"/> object is disposed, otherwise <c>false</c>.</param>
-        public ExcelParser(Stream stream, CultureInfo culture, bool leaveOpen = false) : this(stream, null, culture,
-            leaveOpen)
+        public ExcelParser(Stream stream, CultureInfo culture) : this(stream, null, culture)
         {
         }
 
@@ -82,8 +81,8 @@ namespace CsvHelper.Excel
         /// <param name="sheetName">The sheet name</param>
         /// <param name="culture">The culture.</param>
         /// <param name="leaveOpen"><c>true</c> to leave the <see cref="TextWriter"/> open after the <see cref="ExcelParser"/> object is disposed, otherwise <c>false</c>.</param>
-        public ExcelParser(Stream stream, string sheetName, CultureInfo culture, bool leaveOpen = false) : this(stream,
-            sheetName, new CsvConfiguration(culture, leaveOpen: leaveOpen))
+        public ExcelParser(Stream stream, string sheetName, CultureInfo culture) : this(stream,
+            sheetName, new CsvConfiguration(culture))
         {
         }
 
@@ -123,7 +122,6 @@ namespace CsvHelper.Excel
             }
 
             Context = new CsvContext(this);
-            _leaveOpen = Configuration.LeaveOpen;
         }
 
 
@@ -197,6 +195,8 @@ namespace CsvHelper.Excel
         public int RawRow => _rawRow;
         public CsvContext Context { get; }
         public IParserConfiguration Configuration { get; }
+
+        public string Delimiter => Configuration.Delimiter;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string[] GetRecord()
