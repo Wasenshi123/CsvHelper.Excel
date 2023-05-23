@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
-using System.Text;
-using CsvHelper.Configuration;
+
 
 namespace CsvHelper.Excel
 {
@@ -13,7 +10,7 @@ namespace CsvHelper.Excel
     public class ExcelReader : CsvReader
     {
 
-        public new ExcelParser Parser => (ExcelParser) base.Parser;
+        public new ExcelParser Parser => (ExcelParser)base.Parser;
 
         /// <summary>Initializes a new instance of the <see cref="ExcelReader" /> class.</summary>
         /// <param name="path">The path.</param>

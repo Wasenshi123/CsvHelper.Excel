@@ -1,11 +1,11 @@
-using System.Globalization;
-using System.IO;
-using System.Threading.Tasks;
-using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using ClosedXML.Excel;
 using CsvHelper.Configuration;
+using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace CsvHelper.Excel
 {

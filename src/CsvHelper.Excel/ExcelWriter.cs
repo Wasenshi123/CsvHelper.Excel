@@ -1,91 +1,91 @@
+using ClosedXML.Excel;
+using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using ClosedXML.Excel;
-using CsvHelper.Configuration;
-using CsvHelper.TypeConversion;
 
 #pragma warning disable 649
 #pragma warning disable 169
 
 namespace CsvHelper.Excel
 {
-	/// <summary>
-	/// Used to write CSV files.
-	/// </summary>
-	public class ExcelWriter : CsvWriter
-	{
+    /// <summary>
+    /// Used to write CSV files.
+    /// </summary>
+    public class ExcelWriter : CsvWriter
+    {
 
-		private bool _disposed;
-		private int _row = 1;
-		private int _index = 1;
-		private readonly IXLWorksheet _worksheet;
-		private readonly Stream _stream;
+        private bool _disposed;
+        private int _row = 1;
+        private int _index = 1;
+        private readonly IXLWorksheet _worksheet;
+        private readonly Stream _stream;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ExcelWriter"/> class.
-		/// </summary>
-		/// <param name="path">The path.</param>
-		public ExcelWriter(string path) : this(File.Open(path, FileMode.OpenOrCreate, FileAccess.Write), "export",  CultureInfo.InvariantCulture) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExcelWriter"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public ExcelWriter(string path) : this(File.Open(path, FileMode.OpenOrCreate, FileAccess.Write), "export", CultureInfo.InvariantCulture) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ExcelWriter"/> class.
-		/// </summary>
-		/// <param name="path">The path.</param>
-		/// <param name="culture">The culture.</param>
-		public ExcelWriter(string path, CultureInfo culture) : this(File.Open(path, FileMode.OpenOrCreate, FileAccess.Write), "export",  culture) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExcelWriter"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="culture">The culture.</param>
+        public ExcelWriter(string path, CultureInfo culture) : this(File.Open(path, FileMode.OpenOrCreate, FileAccess.Write), "export", culture) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ExcelWriter"/> class.
-		/// </summary>
-		/// <param name="path">The path.</param>
-		/// <param name="sheetName">The sheet name</param>
-		public ExcelWriter(string path, string sheetName) : this(
-			File.Open(path, FileMode.OpenOrCreate, FileAccess.Write), sheetName, CultureInfo.InvariantCulture)
-		{
-		}
-		
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ExcelWriter"/> class.
-		/// </summary>
-		/// <param name="path">The path.</param>
-		/// <param name="sheetName">The sheet name</param>
-		/// <param name="culture">The culture.</param>
-		public ExcelWriter(string path, string sheetName, CultureInfo culture) : this(
-			File.Open(path, FileMode.OpenOrCreate, FileAccess.Write), sheetName, culture)
-		{
-		}
-		
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ExcelWriter"/> class.
-		/// </summary>
-		/// <param name="stream">The stream.</param>
-		/// <param name="culture">The culture.</param>
-		/// <param name="leaveOpen"><c>true</c> to leave the <see cref="TextWriter"/> open after the <see cref="ExcelWriter"/> object is disposed, otherwise <c>false</c>.</param>
-		public ExcelWriter(Stream stream, CultureInfo culture) : this(stream, "export",  culture) { }
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ExcelWriter"/> class.
-		/// </summary>
-		/// <param name="stream">The stream.</param>
- 		/// <param name="sheetName">The sheet name</param>
-		/// <param name="culture">The culture.</param>
-		public ExcelWriter(Stream stream, string sheetName, CultureInfo culture) : this(stream, sheetName, new CsvConfiguration(culture)) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExcelWriter"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="sheetName">The sheet name</param>
+        public ExcelWriter(string path, string sheetName) : this(
+            File.Open(path, FileMode.OpenOrCreate, FileAccess.Write), sheetName, CultureInfo.InvariantCulture)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ExcelWriter"/> class.
-		/// </summary>
-		/// <param name="stream">The stream.</param>
-		/// <param name="sheetName">The sheet name</param>
-		/// <param name="configuration">The configuration.</param>
-		private ExcelWriter(Stream stream, string sheetName, CsvConfiguration configuration) : base(TextWriter.Null, configuration)
-		{
-			configuration.Validate();
-			_worksheet = new XLWorkbook(XLEventTracking.Disabled).AddWorksheet(sheetName);
-			this._stream = stream;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExcelWriter"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="sheetName">The sheet name</param>
+        /// <param name="culture">The culture.</param>
+        public ExcelWriter(string path, string sheetName, CultureInfo culture) : this(
+            File.Open(path, FileMode.OpenOrCreate, FileAccess.Write), sheetName, culture)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExcelWriter"/> class.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="culture">The culture.</param>
+        /// <param name="leaveOpen"><c>true</c> to leave the <see cref="TextWriter"/> open after the <see cref="ExcelWriter"/> object is disposed, otherwise <c>false</c>.</param>
+        public ExcelWriter(Stream stream, CultureInfo culture) : this(stream, "export", culture) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExcelWriter"/> class.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="sheetName">The sheet name</param>
+        /// <param name="culture">The culture.</param>
+        public ExcelWriter(Stream stream, string sheetName, CultureInfo culture) : this(stream, sheetName, new CsvConfiguration(culture)) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExcelWriter"/> class.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="sheetName">The sheet name</param>
+        /// <param name="configuration">The configuration.</param>
+        private ExcelWriter(Stream stream, string sheetName, CsvConfiguration configuration) : base(TextWriter.Null, configuration)
+        {
+            configuration.Validate();
+            _worksheet = new XLWorkbook(XLEventTracking.Disabled).AddWorksheet(sheetName);
+            this._stream = stream;
+        }
 
         public void SetDefaultColumnWidth(double width)
         {
@@ -99,8 +99,8 @@ namespace CsvHelper.Excel
 
         public void AdjustColumnWidthFitToContents()
         {
-			_worksheet.Columns().AdjustToContents();
-		}
+            _worksheet.Columns().AdjustToContents();
+        }
 
         public void SetColumnWidth(int columnIndex, double width)
         {
@@ -108,9 +108,9 @@ namespace CsvHelper.Excel
         }
 
         public void AdjustRowFitToContents()
-		{
+        {
             _worksheet.Rows().AdjustToContents();
-		}
+        }
 
         public void SetRowHeight(int rowIndex, double height)
         {
@@ -122,8 +122,8 @@ namespace CsvHelper.Excel
         /// <param name="cellCount">The cell count, starting from current writing point to the last merging cell.</param>
         public void MergeCell(int cellCount)
         {
-			MergeCell(_index, cellCount);
-		}
+            MergeCell(_index, cellCount);
+        }
 
         /// <summary>Merges the cell of current row.</summary>
         /// <param name="startCell">The start cell.</param>
@@ -149,40 +149,40 @@ namespace CsvHelper.Excel
 
         /// <inheritdoc/>
 		public override void WriteField(string field, bool shouldQuote)
-		{
-			field = SanitizeForInjection(field);
+        {
+            field = SanitizeForInjection(field);
 
-			WriteToCell(field);
-			_index++;
-		}
+            WriteToCell(field);
+            _index++;
+        }
 
-		/// <inheritdoc/>
-		public override void NextRecord()
-		{
-			Flush();
-			_index = 1;
-			_row++;
-		}
+        /// <inheritdoc/>
+        public override void NextRecord()
+        {
+            Flush();
+            _index = 1;
+            _row++;
+        }
 
-		/// <inheritdoc/>
-		public override async Task NextRecordAsync()
-		{
-			await FlushAsync();
-			_index = 1;
-			_row++;
-		}
+        /// <inheritdoc/>
+        public override async Task NextRecordAsync()
+        {
+            await FlushAsync();
+            _index = 1;
+            _row++;
+        }
 
-		/// <inheritdoc/>
-		public override void Flush()
-		{
-			_stream.Flush();
-		}
+        /// <inheritdoc/>
+        public override void Flush()
+        {
+            _stream.Flush();
+        }
 
-		/// <inheritdoc/>
-		public override Task FlushAsync()
-		{
-			return _stream.FlushAsync();
-		}
+        /// <inheritdoc/>
+        public override Task FlushAsync()
+        {
+            return _stream.FlushAsync();
+        }
 
         public override void WriteField<T>(T field, ITypeConverter converter)
         {
@@ -191,83 +191,83 @@ namespace CsvHelper.Excel
 
             Type type = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
 
-			if (type == typeof(DateTime) || type == typeof(TimeSpan))
+            if (type == typeof(DateTime) || type == typeof(TimeSpan))
             {
                 cell.Style.DateFormat.Format = option.Formats?.FirstOrDefault();
             }
-			else if (type == typeof(int) || type == typeof(double) || type == typeof(float) || type == typeof(long))
+            else if (type == typeof(int) || type == typeof(double) || type == typeof(float) || type == typeof(long))
             {
                 cell.Style.NumberFormat.Format = option.Formats?.FirstOrDefault();
             }
             base.WriteField(field, converter);
-		}
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private void WriteToCell(string value)
-		{
-			var length = value?.Length ?? 0;
+        private void WriteToCell(string value)
+        {
+            var length = value?.Length ?? 0;
 
-			if (value == null || length == 0)
-			{
-				return;
-			}
+            if (value == null || length == 0)
+            {
+                return;
+            }
 
             var cell = _worksheet.Worksheet.AsRange().Cell(_row, _index);
             cell.Value = value;
-		}
+        }
 
-		/// <inheritdoc/>
-		protected override void Dispose(bool disposing)
-		{
-			if (_disposed)
-			{
-				return;
-			}
+        /// <inheritdoc/>
+        protected override void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
 
-			Flush();
-			_worksheet.Workbook.SaveAs(_stream);
-			_stream.Flush();
+            Flush();
+            _worksheet.Workbook.SaveAs(_stream);
+            _stream.Flush();
 
-			if (disposing)
-			{
-				// Dispose managed state (managed objects)
-				_worksheet.Workbook.Dispose();
-				_stream.Dispose();
-			}
+            if (disposing)
+            {
+                // Dispose managed state (managed objects)
+                _worksheet.Workbook.Dispose();
+                _stream.Dispose();
+            }
 
-			// Free unmanaged resources (unmanaged objects) and override finalizer
-			// Set large fields to null
+            // Free unmanaged resources (unmanaged objects) and override finalizer
+            // Set large fields to null
 
-			_disposed = true;
-		}
+            _disposed = true;
+        }
 
 #if !NET45 && !NET47 && !NETSTANDARD2_0
-		
-		/// <inheritdoc/>
-		protected override async ValueTask DisposeAsync(bool disposing)
-		{
-			if (_disposed)
-			{
-				return;
-			}
 
-			await FlushAsync().ConfigureAwait(false);
-			_worksheet.Workbook.SaveAs(_stream);
-			await _stream.FlushAsync().ConfigureAwait(false);
+        /// <inheritdoc/>
+        protected override async ValueTask DisposeAsync(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
 
-			if (disposing)
-			{
-				// Dispose managed state (managed objects)
-				_worksheet.Workbook.Dispose();
-				await _stream.DisposeAsync().ConfigureAwait(false);
-			}
+            await FlushAsync().ConfigureAwait(false);
+            _worksheet.Workbook.SaveAs(_stream);
+            await _stream.FlushAsync().ConfigureAwait(false);
 
-			// Free unmanaged resources (unmanaged objects) and override finalizer
-			// Set large fields to null
+            if (disposing)
+            {
+                // Dispose managed state (managed objects)
+                _worksheet.Workbook.Dispose();
+                await _stream.DisposeAsync().ConfigureAwait(false);
+            }
+
+            // Free unmanaged resources (unmanaged objects) and override finalizer
+            // Set large fields to null
 
 
-			_disposed = true;
-		}
+            _disposed = true;
+        }
 #endif
-	}
+    }
 }
