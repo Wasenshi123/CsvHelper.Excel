@@ -18,7 +18,6 @@ namespace CsvHelper.Excel
     /// </summary>
     public class ExcelWriter : CsvWriter
     {
-
         private bool _disposed;
         private int _row = 1;
         private int _index = 1;
@@ -116,7 +115,6 @@ namespace CsvHelper.Excel
         {
             _worksheet.Row(rowIndex).Height = height;
         }
-
 
         /// <summary>Merges the cell of current row, starting from current writing point.</summary>
         /// <param name="cellCount">The cell count, starting from current writing point to the last merging cell.</param>
@@ -264,7 +262,6 @@ namespace CsvHelper.Excel
 
             // Free unmanaged resources (unmanaged objects) and override finalizer
             // Set large fields to null
-
 
             _disposed = true;
         }

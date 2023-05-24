@@ -9,7 +9,6 @@ namespace CsvHelper.Excel
     /// </summary>
     public class ExcelReader : CsvReader
     {
-
         public new ExcelParser Parser => (ExcelParser)base.Parser;
 
         /// <summary>Initializes a new instance of the <see cref="ExcelReader" /> class.</summary>
